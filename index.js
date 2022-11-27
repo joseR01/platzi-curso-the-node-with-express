@@ -18,6 +18,46 @@ app.get("/ruta2", (req, res) => {
   })
 });
 
+app.get("/productos", (req, res) => {
+  res.json([
+    {
+      name: "tv",
+      precio: 1000
+    },
+    {
+      name: "laptop",
+      precio: 1200
+    },
+    {
+      name: "carro",
+      precio: 2000
+    },
+    {
+      name: "casa",
+      precio: 3000
+    },
+  ])
+});
+
+app.get("/productos/:id", (req, res) => {
+  const { id } = req.params;
+
+  res.json({
+    id,
+    name: `producto ${id}`
+  });
+});
+
+app.get("/categorias/:categoriaId/productos/:productosId", (req, res) => {
+
+  const { categoriaId, productosId } = req.params;
+
+  res.json({
+    categoriaId,
+    productosId
+  })
+});
+
 app.listen(PORT, () => {
   console.log("puerto: " + PORT)
 });
