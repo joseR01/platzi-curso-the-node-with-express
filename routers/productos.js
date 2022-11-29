@@ -14,18 +14,23 @@ router.get("/filter", (req, res) => {
   res.send("aqui vamos a filtrar");
 })
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const products = await service.findOne(id)
-  if (products) {
+router.get("/:id", async (req, res, next) => {
 
-    res.status(200).json(products);
-  } else {
-    res.status(404).json({
-      message: "no se encontro el producto"
-    });
+  try {
+    const { id } = req.params;
+    const products = await service.findOne(id)
+    if (products) {
+      res.status(200).json(products);
+    } else {
+      res.status(404).json({
+        message: "no se encontro el producto"
+      });
 
+    }
+  } catch (error) {
+    next(error)
   }
+
 })
 router.post("/", async (req, res) => {
   const body = req.body;

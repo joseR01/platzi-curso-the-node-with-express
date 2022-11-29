@@ -38,6 +38,7 @@ class ProductsService {
   }
 
   async findOne(id) {
+    const name = this.getTotal();
     return this.products.find(items => items.id == id)
   }
 
