@@ -5,8 +5,8 @@ const ProductsService = require("../service/productos");
 const router = express.Router()
 const service = new ProductsService()
 
-router.get("/", (req, res) => {
-  const productos = service.find()
+router.get("/", async (req, res) => {
+  const productos = await service.find()
   res.json({ size: productos.length, data: productos })
 });
 
@@ -14,9 +14,9 @@ router.get("/filter", (req, res) => {
   res.send("aqui vamos a filtrar");
 })
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const products = service.findOne(id)
+  const products = await service.findOne(id)
   if (products) {
 
     res.status(200).json(products);
@@ -27,9 +27,9 @@ router.get("/:id", (req, res) => {
 
   }
 })
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const body = req.body;
-  const newProducto = service.create(body)
+  const newProducto = await service.create(body)
 
   res.status(201).json({
     message: "created",
@@ -37,25 +37,36 @@ router.post("/", (req, res) => {
   })
 });
 
-router.patch("/:id", (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const product = service.update(id, body);
+router.patch("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const product = await service.update(id, body);
+    res.json({
+      message: "update",
+      date: { product },
 
-  res.json({
-    message: "update",
-    date: { product },
-
-  })
+    })
+  } catch (error) {
+    res.status(404).json({
+      message: error.message
+    })
+  }
 });
 
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-  const products = service.delete(id)
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const products = await service.delete(id)
 
-  res.json({
-    message: "deleted",
-    products
-  })
+    res.json({
+      message: "deleted",
+      products
+    })
+  } catch (error) {
+    res.status(404).json({
+      message: error.message
+    })
+  }
 });
 module.exports = router;
