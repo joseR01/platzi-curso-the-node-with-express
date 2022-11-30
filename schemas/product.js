@@ -5,7 +5,7 @@ const name = join.string().alphanum().min(3).max(15);
 const price = join.number().integer().min(10);
 
 const createProductScheman = join.object({
-  name: name.require(),
+  name: name.required(),
   price: price.required(),
 });
 
@@ -15,7 +15,7 @@ const updateProductScheman = join.object({
 });
 
 const getProductScheman = join.object({
-  id: id.require(),
+  id: id.required(),
 });
 
 module.exports = {
